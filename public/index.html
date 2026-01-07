@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinzxxPedia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --bs-body-bg-rgb: 248, 249, 250;
+            --bs-tertiary-bg-rgb: 255, 255, 255;
+            --bs-border-color: #dee2e6;
+            --bs-primary-rgb: 13, 110, 253;
+            --bs-primary: #0d6efd;
+        }
+        [data-bs-theme="dark"] {
+            --bs-body-bg-rgb: 18, 18, 18;
+            --bs-tertiary-bg-rgb: 30, 30, 30;
+            --bs-border-color: #333;
+            --bs-primary-rgb: 106, 17, 203;
+            --bs-primary: #6a11cb;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-color: rgb(var(--bs-body-bg-rgb));
+            transition: background-color 0.3s ease;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+        .selection-item {
+            cursor: pointer;
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid var(--bs-border-color);
+            background-color: rgb(var(--bs-tertiary-bg-rgb));
+        }
+        .selection-item .card-body {
+            transition: background-color 0.2s ease;
+        }
+        .selection-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1);
+            border-color: var(--bs-primary);
+        }
+        .selection-item:hover .card-body {
+            background-color: rgba(var(--bs-primary-rgb), 0.05);
+        }
+        .selection-item .card-icon i {
+            font-size: 3rem;
+            color: var(--bs-primary);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .selection-item:hover .card-icon i {
+            transform: scale(1.1);
+        }
+        .selection-item .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .selection-item .card-text {
+            font-size: 0.9rem;
+            color: var(--bs-body-secondary);
+        }
+        .feedback-form-card {
+            max-width: 650px;
+            margin: 4rem auto 2rem auto;
+            border: 1px solid var(--bs-border-color);
+            background-color: rgb(var(--bs-tertiary-bg-rgb));
+        }
+        .theme-icon-light, .theme-icon-dark { display: none; }
+        html[data-bs-theme="light"] .theme-icon-light { display: inline-block; }
+        html[data-bs-theme="dark"] .theme-icon-dark { display: inline-block; }
+        #sendFeedbackBtn .spinner-border {
+            vertical-align: middle;
+            margin-right: .5rem;
+            display: none;
+        }
+        #sendFeedbackBtn.loading .spinner-border {
+            display: inline-block;
+        }
+        #sendFeedbackBtn.loading .btn-text {
+            display: none;
+        }
+        .carousel-item img {
+            max-height: 400px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .carousel-caption {
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            padding-bottom: 2rem;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .custom-footer {
+            background-color: rgb(var(--bs-tertiary-bg-rgb));
+            border-top: 1px solid var(--bs-border-color);
+            padding-top: 3rem;
+            padding-bottom: 2rem;
+        }
+        .custom-footer h5 {
+            color: var(--bs-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .custom-footer .list-unstyled li a, .custom-footer p, .custom-footer .contact-info span {
+            color: var(--bs-body-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .custom-footer .list-unstyled li a:hover {
+            color: var(--bs-primary);
+        }
+        .custom-footer .social-icons a {
+            font-size: 1.5rem;
+            color: var(--bs-body-secondary);
+            margin-right: 1rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .custom-footer .social-icons a:hover {
+            color: var(--bs-primary);
+            transform: translateY(-3px);
+        }
+        
+        /* Styling khusus untuk kartu panduan */
+        .guide-card {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+        .guide-card .card-icon i {
+            color: white;
+        }
+        .guide-card .card-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .guide-card:hover {
+            background: linear-gradient(135deg, #5a0db8 0%, #1c6ae8 100%);
+        }
+        
+        /* Styling untuk sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: rgb(var(--bs-tertiary-bg-rgb));
+            border-right: 1px solid var(--bs-border-color);
+            z-index: 1050;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            padding: 1rem;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+        
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--bs-primary);
+            margin: 0;
+        }
+        
+        .sidebar-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--bs-body-color);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .sidebar-close:hover {
+            color: var(--bs-primary);
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            color: var(--bs-body-color);
+            text-decoration: none;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.1);
+            color: var(--bs-primary);
+        }
+        
+        .sidebar-item i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .sidebar-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1030;
+            background-color: var(--bs-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .sidebar-toggle:hover {
+            transform: scale(1.05);
+            background-color: rgba(var(--bs-primary-rgb), 0.9);
+        }
+        
+        .sidebar-toggle i {
+            font-size: 1.5rem;
+        }
+        
+        /* Responsif untuk sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+            
+            .sidebar-toggle {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        
+        /* Animasi untuk konten sidebar */
+        .sidebar-content {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+        }
+        
+        .sidebar.open .sidebar-content {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-body">
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <!-- Kategori Top Up Digital -->
+            <div class="sidebar-item" data-type="topup">
+                <i class="bi bi-phone-vibrate-fill"></i>
+                <span>Top Up Produk Digital</span>
+            </div>
+            
+            <!-- Produk Lainnya -->
+            <div class="sidebar-item" data-type="panel">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Produk Lainnya</span>
+            </div>
+            
+            <!-- Panduan Untuk Membeli -->
+            <div class="sidebar-item" data-type="panduan">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>Panduan Untuk Membeli</span>
+            </div>
+            
+            <!-- Tautan Cepat -->
+            <div class="mt-4">
+                <h5 class="sidebar-title">Tautan Cepat</h5>
+                <a href="#" class="sidebar-item">
+                    <i class="bi bi-file-text-fill"></i>
+                    <span>Syarat & Ketentuan</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>Kebijakan Privasi</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="bi bi-question-circle-fill"></i>
+                    <span>Pusat Bantuan</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span>Hubungi Kami</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar navbar-expand-lg bg-body-tertiary shadow-sm sticky-top">
+        <nav class="container">
+            <a class="navbar-brand fw-bolder" href="/">
+                <i class="bi bi-lightning-charge-fill text-primary me-2"></i>
+            </a>
+            <button id="theme-toggle" class="btn btn-outline-secondary border-0 fs-5" aria-label="Toggle theme">
+                <i class="bi bi-sun-fill theme-icon-light"></i>
+                <i class="bi bi-moon-stars-fill theme-icon-dark"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container py-4 py-lg-5 animate-fade-in">
+        <section class="mb-5">
+            <div id="carouselExampleAutoplaying" class="carousel slide rounded-4 overflow-hidden shadow-lg" data-bs-ride="carousel" data-bs-interval="4000">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://files.catbox.moe/eabe85.jpg" class="d-block w-100" alt="Banner 1">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="fw-bold">Promo Spesial Untuk Anda!</h5>
+                            <p>Dapatkan diskon menarik untuk semua produk digital favoritmu.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://files.catbox.moe/eabe85.jpg" class="d-block w-100" alt="Banner 2">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="fw-bold">Top Up Cepat dan Aman</h5>
+                            <p>Transaksi mudah, aman, dan diproses hanya dalam hitungan detik.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://files.catbox.moe/eabe85.jpg" class="d-block w-100" alt="Banner 3">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="fw-bold">Layanan Pelanggan 24/7</h5>
+                            <p>Tim kami siap membantu kapan saja Anda membutuhkan bantuan.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold display-5">Pilih Layanan Kami</h1>
+                <p class="lead text-body-secondary">Kami menyediakan berbagai layanan digital untuk memenuhi semua kebutuhan Anda.</p>
+            </div>
+            <div id="main-service-row" class="row g-4 justify-content-center">
+                <!-- Kartu Panduan Untuk Membeli - Ditambahkan di sini -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card selection-item h-100 shadow-sm" data-type="panduan" title="Pelajari Cara Isi Tujuan Transaksi">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
+                            <div class="card-icon"><i class="bi bi-journal-bookmark-fill"></i></div>
+                            <h5 class="card-title">Panduan Untuk Membeli</h5>
+                            <p class="card-text">Pelajari cara isi tujuan transaksi dengan benar agar tidak gagal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="card feedback-form-card shadow-sm rounded-4">
+                <div class="card-body p-4 p-lg-5">
+                    <h2 class="card-title mb-4 fw-bold text-center"><i class="bi bi-envelope-heart-fill me-2 text-primary"></i>Kirim Masukan Anda</h2>
+                    <form id="feedbackForm">
+                        <div class="mb-3">
+                            <label for="namaLengkap" class="form-label fw-medium">Nama Lengkap</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" class="form-control" id="namaLengkap" placeholder="Masukkan nama lengkap Anda" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="pesanMasukan" class="form-label fw-medium">Pesan Masukan</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-chat-left-text-fill"></i></span>
+                                <textarea class="form-control" id="pesanMasukan" rows="4" placeholder="Tuliskan masukan, saran, atau kritik Anda di sini..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" id="sendFeedbackBtn" class="btn btn-primary btn-lg fw-bold">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="btn-text"><i class="bi bi-send-fill me-2"></i>Kirim Masukan</span>
+                            </button>
+                        </div>
+                        <div id="feedbackMessage" class="d-none"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="custom-footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <h5><i class="bi bi-info-circle-fill me-2"></i>Tentang Kami</h5>
+                    <p class="text-body-secondary">Khafa-Vedia adalah platform terdepan untuk top up produk digital. Kami berkomitmen menyediakan layanan yang cepat, aman, dan terpercaya bagi semua pelanggan.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <h5><i class="bi bi-link-45deg me-2"></i>Tautan Cepat</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Syarat & Ketentuan</a></li>
+                        <li class="mb-2"><a href="#">Kebijakan Privasi</a></li>
+                        <li class="mb-2"><a href="#">Pusat Bantuan</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <h5><i class="bi bi-share-fill me-2"></i>Ikuti & Hubungi Kami</h5>
+                    <div class="social-icons mb-3">
+                        <a href="https://www.youtube.com/c/ipulshopstore" aria-label="YouTube" title="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="https://wa.me//62895379234782" aria-label="WhatsApp" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://t.me/kinzxxoffc" aria-label="Telegram" title="Telegram"><i class="bi bi-telegram"></i></a>
+                    </div>
+                    <div class="contact-info">
+                        <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i><span>ifuumar794@gmail.com</span></p>
+                        <p class="mb-0"><i class="bi bi-telephone-fill me-2"></i><span>+62 895 379 234 782</span></p>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-12 text-center text-body-secondary">
+                    <p class="mb-0">&copy; 2025 Kinzxx-Pedia. Semua Hak Cipta Dilindungi.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDjOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    const theme = {
+        init() {
+            this.toggleButton = document.getElementById('theme-toggle');
+            this.applyTheme(localStorage.getItem('theme') || 'light');
+            this.toggleButton.addEventListener('click', () => this.toggle());
+        },
+        applyTheme(themeName) {
+            document.documentElement.setAttribute('data-bs-theme', themeName);
+            localStorage.setItem('theme', themeName);
+            const event = new Event('themeChange');
+            document.getElementById('bg-canvas').dispatchEvent(event);
+        },
+        toggle() { this.applyTheme(document.documentElement.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light'); }
+    };
+    const canvasAnimation = {
+        init() {
+            this.canvas = document.getElementById('bg-canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.particles = [];
+            this.particleCount = window.innerWidth > 768 ? 80 : 30;
+            this.connectDistance = 120;
+            window.addEventListener('resize', () => this.resize());
+            this.canvas.addEventListener('themeChange', () => this.updateColors());
+            this.resize(); this.animate();
+        },
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.particleCount = window.innerWidth > 768 ? 80 : 30;
+            this.particles = [];
+            for (let i = 0; i < this.particleCount; i++) {
+                this.particles.push({
+                    x: Math.random() * this.canvas.width, y: Math.random() * this.canvas.height,
+                    dx: (Math.random() - 0.5) * 0.4, dy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 1.5 + 1,
+                });
+            }
+             this.updateColors();
+        },
+        updateColors() {
+             this.particleColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-border-color').trim();
+             this.ctx.fillStyle = this.particleColor;
+             this.ctx.strokeStyle = this.particleColor;
+        },
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.updateColors();
+            this.particles.forEach(p => {
+                p.x += p.dx; p.y += p.dy;
+                if (p.x < 0 || p.x > this.canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > this.canvas.height) p.dy *= -1;
+                this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); this.ctx.fill();
+            });
+            for (let i = 0; i < this.particles.length; i++) {
+                for (let j = i + 1; j < this.particles.length; j++) {
+                    const dist = Math.hypot(this.particles[i].x - this.particles[j].x, this.particles[i].y - this.particles[j].y);
+                    if (dist < this.connectDistance) {
+                        this.ctx.beginPath(); this.ctx.globalAlpha = 1 - dist / this.connectDistance;
+                        this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                        this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                        this.ctx.stroke();
+                    }
+                }
+            }
+            this.ctx.globalAlpha = 1; requestAnimationFrame(() => this.animate());
+        }
+    };
+    
+    // Sidebar functionality
+    const sidebar = {
+        init() {
+            this.sidebar = document.getElementById('sidebar');
+            this.sidebarToggle = document.getElementById('sidebarToggle');
+            this.sidebarClose = document.getElementById('sidebarClose');
+            this.sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            this.sidebarToggle.addEventListener('click', () => this.open());
+            this.sidebarClose.addEventListener('click', () => this.close());
+            this.sidebarOverlay.addEventListener('click', () => this.close());
+            
+            // Add click handlers for sidebar items
+            const sidebarItems = this.sidebar.querySelectorAll('.sidebar-item[data-type]');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const serviceType = item.dataset.type;
+                    this.navigateToService(serviceType);
+                    this.close();
+                });
+            });
+            
+            // Close sidebar when pressing Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') this.close();
+            });
+        },
+        open() {
+            this.sidebar.classList.add('open');
+            this.sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+        close() {
+            this.sidebar.classList.remove('open');
+            this.sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        },
+        navigateToService(serviceType) {
+            switch (serviceType) {
+                case 'topup':
+                    window.location.href = '/topup';
+                    break;
+                case 'panel':
+                    window.location.href = '/products';
+                    break;
+                case 'panduan':
+                    window.location.href = '/panduan';
+                    break;
+            }
+        }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        theme.init();
+        canvasAnimation.init();
+        sidebar.init();
+        
+        const mainServiceRow = document.getElementById('main-service-row');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const sendFeedbackBtn = document.getElementById('sendFeedbackBtn');
+        const feedbackMessageDiv = document.getElementById('feedbackMessage');
+        
+        mainServiceRow.addEventListener('click', (e) => {
+            const card = e.target.closest('.selection-item');
+            if (card) {
+                const serviceType = card.dataset.type;
+                switch (serviceType) {
+                    case 'panduan':
+                        window.location.href = '/panduan';
+                        break;
+                }
+            }
+        });
+        
+        feedbackForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const TELEGRAM_BOT_TOKEN = '8576430314:AAExsi0NGjdEcOMMrm3GFDvu5wulniddJZY';
+            const TELEGRAM_CHAT_ID = '6797348304';
+            const nama = feedbackForm.elements.namaLengkap.value.trim();
+            const pesan = feedbackForm.elements.pesanMasukan.value.trim();
+            if (!nama || !pesan) {
+                showFeedbackMessage('Nama lengkap dan pesan masukan tidak boleh kosong.', 'danger');
+                return;
+            }
+            sendFeedbackBtn.disabled = true;
+            sendFeedbackBtn.classList.add('loading');
+            feedbackMessageDiv.classList.add('d-none');
+            const messageText = `<b>🔔 Masukan Baru dari Website
+🌐: https://kinzxxdeploy.vercel.app/ 🔔</b>\n\n` +
+                                `<b>Dari:</b>\n${nama}\n\n` +
+                                `<b>Pesan:</b>\n${pesan}`;
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: messageText,
+                        parse_mode: 'HTML'
+                    })
+                });
+                const data = await response.json();
+                if (response.ok && data.ok) {
+                    showFeedbackMessage('Masukan Anda berhasil dikirim! Terima kasih.', 'success');
+                    feedbackForm.reset();
+                } else {
+                    throw new Error(data.description || 'Gagal mengirim pesan ke Telegram.');
+                }
+            } catch (error) {
+                showFeedbackMessage('Terjadi kesalahan saat mengirim masukan. Silakan coba lagi nanti.', 'danger');
+            } finally {
+                sendFeedbackBtn.disabled = false;
+                sendFeedbackBtn.classList.remove('loading');
+            }
+        });
+        
+        function showFeedbackMessage(message, type) {
+            feedbackMessageDiv.textContent = message;
+            feedbackMessageDiv.className = `feedback-message text-center mt-3 alert alert-${type}`;
+        }
+    });
+    </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/68d7f9c384c419194f0dba9d/1j65qf9eq';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+</html>
