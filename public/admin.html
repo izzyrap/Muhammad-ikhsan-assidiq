@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Manajemen Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7fc; font-family: 'Poppins', sans-serif; color: #333; }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,.05); background-color: #fff; }
+        .navbar-brand i { color: #0d6efd; }
+        .main-content-card { border: none; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card-header-custom { background-color: #fff; border-bottom: 1px solid #dee2e6; }
+        .produk-list { max-height: 500px; overflow-y: auto; }
+        .produk-list::-webkit-scrollbar { width: 8px; }
+        .produk-list::-webkit-scrollbar-track { background: #f1f3f5; }
+        .produk-list::-webkit-scrollbar-thumb { background: #adb5bd; border-radius: 4px; }
+        .produk-image { width: 50px; height: 50px; object-fit: cover; border-radius: 0.5rem; }
+        .produk-info { overflow: hidden; }
+        .produk-info h6, .produk-info p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .footer { padding: 1.5rem 0; color: #6c757d; font-size: 0.9rem; }
+        #status.success { color: #198754; font-weight: 600; }
+        #status.error { color: #dc3545; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-shield-lock-fill fs-4 align-middle"></i>
+                <span class="ms-2 align-middle">Panel Admin</span>
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <div class="btn-group" role="group">
+                    <a href="#" class="btn btn-primary active d-flex align-items-center"><i class="bi bi-house-door-fill me-2"></i>Home</a>
+                    <a href="/mutasi" class="btn btn-outline-primary d-flex align-items-center"><i class="bi bi-bar-chart-line-fill me-2"></i>Mutasi</a>
+                </div>
+                <button class="btn btn-link text-danger ms-2" onclick="logout()" title="Logout">
+                    <i class="bi bi-box-arrow-right fs-4"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container mt-4" role="main">
+        <h1 class="h3 mb-4 fw-bold text-dark"><i class="bi bi-box-seam-fill me-2"></i>Manajemen Produk</h1>
+
+        <div class="card main-content-card mb-4">
+            <div class="card-header card-header-custom">
+                <h5 class="mb-0 fw-semibold"><i class="bi bi-plus-circle-fill me-2"></i>Tambah Produk Baru</h5>
+            </div>
+            <div class="card-body p-4">
+                <form id="formProduk" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nama" class="form-label">Nama Produk <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Contoh: Panel Ptrodctyl 10k" required autocomplete="off" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="deks" class="form-label">Deskripsi Singkat</label>
+                            <input type="text" class="form-control" id="deks" name="deks" placeholder="Panel 1gb 1.000" autocomplete="off" />
+                        </div>
+                        <div class="col-12">
+                            <label for="fulldesk" class="form-label">Deskripsi Lengkap</label>
+                            <textarea class="form-control" id="fulldesk" name="fulldesk" placeholder="Deskripsi lengkap produk akan ditampilkan di detail..." rows="3"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="imageurl" class="form-label">URL Gambar</label>
+                            <input type="text" class="form-control" id="imageurl" name="imageurl" placeholder="https://example.com/image.jpg" autocomplete="off" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="linkorder" class="form-label">Link Order (WA)</label>
+                            <input type="text" class="form-control" id="linkorder" name="linkorder" placeholder="https://wa.me/..." autocomplete="off" />
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-database-add me-2"></i> Tambah Produk
+                            </button>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <div id="status" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card main-content-card">
+            <div class="card-header card-header-custom">
+                <h5 class="mb-0 fw-semibold"><i class="bi bi-collection-fill me-2"></i>Daftar Produk</h5>
+            </div>
+            <div class="card-body p-0">
+                <div id="produkContainer" class="produk-list list-group list-group-flush"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center mt-5">
+        <div class="container"><span>&copy; 2025 Panel Admin. All Rights Reserved.</span></div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function tambahProduk() {
+            const nama = document.getElementById("nama").value.trim();
+            const deks = document.getElementById("deks").value.trim();
+            const fulldesk = document.getElementById("fulldesk").value.trim();
+            const imageurl = document.getElementById("imageurl").value.trim();
+            const linkorder = document.getElementById("linkorder").value.trim();
+            const statusBox = document.getElementById("status");
+            statusBox.textContent = ''; statusBox.className = '';
+            if (!nama) {
+                statusBox.textContent = 'Nama produk wajib diisi.'; statusBox.className = 'error';
+                document.getElementById("nama").focus(); return;
+            }
+            try {
+                const res = await fetch('/produk', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', body: JSON.stringify({ nama, deks, fulldesk, imageurl, linkorder })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    statusBox.textContent = '✅ Produk berhasil ditambahkan!'; statusBox.className = 'success';
+                    document.getElementById("formProduk").reset(); document.getElementById("nama").focus();
+                    loadProduk();
+                } else {
+                    statusBox.textContent = result.message || '❌ Gagal menambahkan produk.'; statusBox.className = 'error';
+                }
+            } catch (err) {
+                statusBox.textContent = '❌ Koneksi gagal, coba lagi.'; statusBox.className = 'error';
+            }
+        }
+        async function loadProduk() {
+            const container = document.getElementById("produkContainer");
+            container.innerHTML = '<div class="list-group-item text-muted text-center p-4">Memuat data produk...</div>';
+            try {
+                const res = await fetch('/produk'); const result = await res.json();
+                if (result.success && result.data.length > 0) {
+                    container.innerHTML = '';
+                    result.data.forEach(prod => {
+                        const prodDiv = document.createElement('div');
+                        prodDiv.className = 'list-group-item d-flex flex-wrap align-items-center gap-3 py-3 px-4';
+                        prodDiv.innerHTML = `
+                            <img src="${prod.imageurl && prod.imageurl.trim() !== '' ? prod.imageurl : 'https://placehold.co/50x50/E9ECEF/495057?text=N/A'}" alt="Gambar ${prod.nama}" class="produk-image">
+                            <div class="produk-info flex-grow-1">
+                                <h6 class="mb-0 fw-bold">${prod.nama}</h6>
+                                <p class="mb-0 text-muted small">${prod.deks && prod.deks.trim() !== '' ? prod.deks : 'Tidak ada deskripsi singkat.'}</p>
+                            </div>
+                            <div class="produk-actions d-flex gap-2 ms-sm-auto mt-2 mt-sm-0">
+                                ${prod.linkorder && prod.linkorder.trim() !== '' ? `<button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Salin Link Order" onclick="copyLink(this, '${prod.linkorder}')"><i class="bi bi-clipboard"></i></button>` : ''}
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="hapusProduk('${prod._id}', '${prod.nama}')"><i class="bi bi-trash3-fill"></i></button>
+                            </div>`;
+                        container.appendChild(prodDiv);
+                    });
+                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl); });
+                } else { container.innerHTML = '<div class="list-group-item text-muted text-center p-4">Belum ada produk.</div>'; }
+            } catch { container.innerHTML = '<div class="list-group-item text-danger text-center p-4 fw-bold">❌ Gagal memuat data produk.</div>'; }
+        }
+        async function hapusProduk(id, nama) {
+            if (!confirm(`Yakin ingin menghapus produk "${nama}"?`)) return;
+            try {
+                const res = await fetch(`/produk/${id}`, { method: 'DELETE', credentials: 'include' });
+                const result = await res.json();
+                if (result.success) {
+                    loadProduk();
+                } else { alert(`❌ Gagal hapus produk: ${result.message}`); }
+            } catch { alert('❌ Koneksi gagal, coba lagi.'); }
+        }
+        async function logout() {
+            try {
+                const res = await fetch('/logout', { method: 'GET', credentials: 'include' });
+                const result = await res.json();
+                if (result.success) { window.location.href = '/login'; } else { alert('Gagal logout, coba lagi.'); }
+            } catch { alert('Gagal logout, coba lagi.'); }
+        }
+        function copyLink(element, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const tooltip = bootstrap.Tooltip.getInstance(element);
+                element.setAttribute('data-bs-original-title', 'Tersalin!');
+                tooltip.show();
+                setTimeout(() => {
+                    element.setAttribute('data-bs-original-title', 'Salin Link Order');
+                    tooltip.hide();
+                }, 1500);
+            });
+        }
+        document.getElementById('formProduk').addEventListener('submit', e => { e.preventDefault(); tambahProduk(); });
+        window.addEventListener('load', () => { loadProduk(); document.getElementById("nama").focus(); });
+    </script>
+</body>
+</html>
