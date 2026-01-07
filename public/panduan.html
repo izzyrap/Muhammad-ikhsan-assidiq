@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kinzxxPedia - Panduan Pembelian PPOB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #ffcc00;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .intro h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .intro p {
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .categories-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .guide-section {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .guide-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .guide-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .guide-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .guide-step {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .guide-step::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .guide-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin-top: 10px;
+        }
+
+        .special-note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            background: var(--gray);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-float i {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .guide-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <span>kinzxxPedia</span>
+            </div>
+            <p class="tagline">Top Up Produk Digital - Panduan Pembelian PPOB</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="intro">
+            <h2>Panduan Pengisian Tujuan Pembelian</h2>
+            <p>Pilih kategori produk di bawah ini untuk melihat panduan pengisian tujuan yang benar. Pastikan Anda mengisi sesuai petunjuk untuk transaksi yang sukses.</p>
+        </section>
+
+        <section class="categories-section">
+            <h3 class="section-title">Pilih Kategori</h3>
+            <div class="categories-grid" id="categoriesContainer">
+                <!-- Kategori akan diisi oleh JavaScript -->
+            </div>
+        </section>
+
+        <section class="guide-section" id="guideSection">
+            <!-- Panduan akan diisi oleh JavaScript -->
+        </section>
+    </div>
+
+    <a href="https://wa.me/6283136711869" target="https://wa.me/6283136711869" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 kinzxxPedia. Semua hak dilindungi.</p>
+            <p>🌐: <span class="highlight">kinzxxdeploy.vercel.app</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Data kategori dan panduannya
+        const categories = [
+            {
+                id: "aktivasi-perdana",
+                name: "Aktivasi Perdana",
+                icon: "fas fa-sim-card",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span> (jika diminta)",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "aktivasi-voucher",
+                name: "Aktivasi Voucher",
+                icon: "fas fa-qrcode",
+                guide: "Masukkan <span class='highlight'>Email atau kode</span> sesuai petunjuk produk",
+                example: "Contoh: email@contoh.com atau VCH123456"
+            },
+            {
+                id: "akun-premium",
+                name: "Akun Premium",
+                icon: "fas fa-user-shield",
+                guide: "Masukkan <span class='highlight'>Email aktif</span>",
+                example: "Contoh: email@contoh.com",
+                specialNote: "Khusus Netflix: Masukkan dengan format <span class='highlight'>Device,Lokasi</span>"
+            },
+            {
+                id: "netflix",
+                name: "Netflix",
+                icon: "fas fa-tv",
+                guide: "Masukkan dengan format: <span class='highlight'>Device,Lokasi</span>",
+                example: "Contoh: iPhone,Palembang"
+            },
+            {
+                id: "china-topup",
+                name: "China TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform China",
+                example: "Contoh: ID game atau nomor akun platform China"
+            },
+            {
+                id: "data-internet",
+                name: "Data Internet",
+                icon: "fas fa-wifi",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span>",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "e-money",
+                name: "E-Money",
+                icon: "fas fa-wallet",
+                guide: "Masukkan <span class='highlight'>Nomor Tujuan</span> (DANA, OVO, dll)",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "games",
+                name: "Games",
+                icon: "fas fa-gamepad",
+                guide: "Masukkan <span class='highlight'>User ID</span>",
+                example: "Contoh: 123456789",
+                specialNote: "Khusus Mobile Legends: Masukkan <span class='highlight'>User ID dan Zone ID</span>"
+            },
+            {
+                id: "mobile-legends",
+                name: "Mobile Legends",
+                icon: "fas fa-mobile",
+                guide: "Masukkan <span class='highlight'>User ID dan Zone ID</span>",
+                example: "Contoh: 127818|1781"
+            },
+            {
+                id: "malaysia-topup",
+                name: "Malaysia TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform Malaysia",
+                example: "Contoh: ID game atau nomor akun platform Malaysia"
+            },
+            {
+                id: "masa-aktif",
+                name: "Masa Aktif",
+                icon: "fas fa-clock",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span>",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "pln",
+                name: "PLN",
+                icon: "fas fa-bolt",
+                guide: "Masukkan <span class='highlight'>ID Pelanggan PLN</span>",
+                example: "Contoh: 12345678901"
+            },
+            {
+                id: "paket-sms-telepon",
+                name: "Paket SMS & Telepon",
+                icon: "fas fa-sms",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span>",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "philippines-topup",
+                name: "Philippines TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform Philippines",
+                example: "Contoh: ID game atau nomor akun platform Philippines"
+            },
+            {
+                id: "pulsa-reguler",
+                name: "Pulsa Reguler",
+                icon: "fas fa-mobile-alt",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span>",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "pulsa-transfer",
+                name: "Pulsa Transfer",
+                icon: "fas fa-exchange-alt",
+                guide: "Masukkan <span class='highlight'>Nomor HP tujuan</span>",
+                example: "Contoh: 081234567890"
+            },
+            {
+                id: "singapore-topup",
+                name: "Singapore TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform Singapore",
+                example: "Contoh: ID game atau nomor akun platform Singapore"
+            },
+            {
+                id: "streaming",
+                name: "Streaming",
+                icon: "fas fa-play-circle",
+                guide: "Masukkan <span class='highlight'>ID pelanggan atau akun tujuan</span>",
+                example: "Contoh: 123456789 atau username"
+            },
+            {
+                id: "tv",
+                name: "TV",
+                icon: "fas fa-tv",
+                guide: "Masukkan <span class='highlight'>ID pelanggan atau akun tujuan</span>",
+                example: "Contoh: 123456789 atau username"
+            },
+            {
+                id: "thailand-topup",
+                name: "Thailand TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform Thailand",
+                example: "Contoh: ID game atau nomor akun platform Thailand"
+            },
+            {
+                id: "vietnam-topup",
+                name: "Vietnam TOPUP",
+                icon: "fas fa-flag",
+                guide: "Masukkan <span class='highlight'>ID atau nomor tujuan</span> sesuai dengan platform Vietnam",
+                example: "Contoh: ID game atau nomor akun platform Vietnam"
+            },
+            {
+                id: "voucher",
+                name: "Voucher",
+                icon: "fas fa-ticket-alt",
+                guide: "Masukkan <span class='highlight'>Nomar atau Email tujuan</span>",
+                example: "Contoh: 081234567890 atau email@contoh.com"
+            }
+        ];
+
+        // Fungsi untuk menampilkan kategori
+        function displayCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.setAttribute('data-category', category.id);
+                categoryCard.innerHTML = `
+                    <div class="category-icon">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <div class="category-name">${category.name}</div>
+                `;
+                container.appendChild(categoryCard);
+            });
+            
+            // Tambahkan event listener untuk setiap kategori
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const categoryId = this.getAttribute('data-category');
+                    showGuide(categoryId);
+                });
+            });
+        }
+
+        // Fungsi untuk menampilkan panduan
+        function showGuide(categoryId) {
+            const category = categories.find(cat => cat.id === categoryId);
+            if (!category) return;
+            
+            const guideSection = document.getElementById('guideSection');
+            
+            let guideHTML = `
+                <div class="guide-header">
+                    <div class="guide-icon">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <div>
+                        <h2 class="guide-title">${category.name}</h2>
+                        <p>Panduan Pengisian Tujuan</p>
+                    </div>
+                </div>
+                <div class="guide-content">
+                    <p>Untuk produk <strong>${category.name}</strong>, pastikan Anda mengisi kolom tujuan dengan format berikut:</p>
+                    <div class="guide-step">
+                        <p>${category.guide}</p>
+                    </div>
+                    <div class="guide-example">
+                        <strong>Contoh Pengisian:</strong><br>
+                        ${category.example}
+                    </div>
+            `;
+            
+            // Tambahkan catatan khusus jika ada
+            if (category.specialNote) {
+                guideHTML += `
+                    <div class="special-note">
+                        <strong>Catatan Penting:</strong><br>
+                        ${category.specialNote}
+                    </div>
+                `;
+            }
+            
+            guideHTML += `
+                </div>
+                <button class="back-button" id="backButton">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar Kategori
+                </button>
+            `;
+            
+            guideSection.innerHTML = guideHTML;
+            guideSection.style.display = 'block';
+            
+            // Scroll ke panduan
+            guideSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Event listener untuk tombol kembali
+            document.getElementById('backButton').addEventListener('click', function() {
+                guideSection.style.display = 'none';
+                document.querySelector('.categories-section').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Inisialisasi tampilan kategori
+        document.addEventListener('DOMContentLoaded', () => {
+            displayCategories();
+            
+            // Animasi smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+
+        // Efek scroll header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '1rem 0';
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.padding = '1.5rem 0';
+                header.style.boxShadow = 'var(--shadow)';
+            }
+        });
+    </script>
+</body>
+</html>

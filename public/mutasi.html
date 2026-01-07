@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Mutasi Profesional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bs-primary-rgb: 13, 110, 253; --bs-success-rgb: 25, 135, 84; }
+        body { background-color: #f4f7fc; font-family: 'Poppins', sans-serif; color: #333; }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,.05); background-color: #fff; }
+        .navbar-brand i { color: #0d6efd; }
+        .summary-card { border: none; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .summary-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .summary-card .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 1rem; }
+        .icon-profit { background-color: rgba(var(--bs-success-rgb), 0.1); color: #198754; }
+        .icon-success { background-color: rgba(var(--bs-primary-rgb), 0.1); color: #0d6efd; }
+        .icon-total { background-color: rgba(108, 117, 125, 0.1); color: #6c757d; }
+        .icon-volume { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+        .summary-card .value { font-size: 1.75rem; font-weight: 700; }
+        .summary-card .title { font-size: 0.9rem; color: #6c757d; margin: 0; }
+        .main-content-card { border: none; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card-header-custom { background-color: #fff; border-bottom: 1px solid #dee2e6; }
+        .table thead th { font-weight: 600; color: #495057; background-color: #f8f9fa; }
+        .table tbody tr { transition: background-color 0.15s ease-in-out; }
+        tbody tr:hover { background-color: #eef2f7; cursor: pointer; }
+        .status-badge { padding: 0.4em 0.8em; font-size: 0.75rem; font-weight: 600; border-radius: 25px; }
+        .status-success { color: #198754; background-color: rgba(var(--bs-success-rgb), 0.1); }
+        .status-pending { color: #ffc107; background-color: rgba(255, 193, 7, 0.1); }
+        .status-failed { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); }
+        .modal-header-custom { background: linear-gradient(90deg, #2c3e50, #34495e); color: white; }
+        #chart-container { position: relative; height: 40vh; min-height: 350px; }
+        .search-wrapper { position: relative; }
+        .search-wrapper .bi-search { position: absolute; top: 50%; left: 1rem; transform: translateY(-50%); color: #6c757d; }
+        #searchInput { padding-left: 2.5rem; }
+        .footer { padding: 1.5rem 0; color: #6c757d; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-shield-lock-fill fs-4 align-middle"></i>
+                <span class="ms-2 align-middle">Panel Admin</span>
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <div class="btn-group" role="group">
+                    <a href="#" class="btn btn-primary active d-flex align-items-center"><i class="bi bi-bar-chart-line-fill me-2"></i>Mutasi</a>
+                    <a href="/admin" class="btn btn-outline-primary d-flex align-items-center"><i class="bi bi-box-seam-fill me-2"></i>Kelola Produk</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+             <h1 class="h3 mb-0 fw-bold text-dark"><i class="bi bi-receipt-cutoff me-2"></i>Rekap Transaksi</h1>
+             <button id="refresh-button" class="btn btn-light border" onclick="fetchTransactions()" title="Segarkan Data"><i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 col-xl-3 mb-3"><div class="card summary-card"><div class="card-body"><div class="icon-circle icon-profit"><i class="bi bi-cash-stack"></i></div><div><p class="title">Total Keuntungan</p><h4 class="value" id="total-keuntungan">--</h4></div></div></div></div>
+            <div class="col-md-6 col-xl-3 mb-3"><div class="card summary-card"><div class="card-body"><div class="icon-circle icon-success"><i class="bi bi-check2-circle"></i></div><div><p class="title">Transaksi Sukses</p><h4 class="value" id="total-sukses">--</h4></div></div></div></div>
+            <div class="col-md-6 col-xl-3 mb-3"><div class="card summary-card"><div class="card-body"><div class="icon-circle icon-volume"><i class="bi bi-bar-chart-line-fill"></i></div><div><p class="title">Total Volume</p><h4 class="value" id="total-volume">--</h4></div></div></div></div>
+            <div class="col-md-6 col-xl-3 mb-3"><div class="card summary-card"><div class="card-body"><div class="icon-circle icon-total"><i class="bi bi-list-ol"></i></div><div><p class="title">Total Transaksi</p><h4 class="value" id="total-transaksi">--</h4></div></div></div></div>
+        </div>
+
+        <div class="card main-content-card mb-4">
+            <div class="card-header card-header-custom"><h5 class="mb-0 fw-semibold"><i class="bi bi-bar-chart-fill me-2"></i>Performa Harian</h5></div>
+            <div class="card-body"><div id="chart-container"><canvas id="transactionChart"></canvas></div><div id="chart-placeholder" class="d-none text-center py-5"><i class="bi fs-2"></i><p class="mt-2 mb-0"></p></div></div>
+        </div>
+
+        <div class="card main-content-card">
+            <div class="card-header card-header-custom"><h5 class="mb-0 fw-semibold"><i class="bi bi-table me-2"></i>Riwayat Mutasi Terakhir</h5></div>
+            <div class="card-body"><div class="search-wrapper mb-3"><i class="bi bi-search"></i><input type="search" id="searchInput" class="form-control" placeholder="Cari transaksi (ID Order, Produk, Tujuan...)"></div><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th scope="col" class="ps-3">Tanggal</th><th scope="col">ID Order</th><th scope="col">Produk</th><th scope="col">Tujuan</th><th scope="col" class="text-end">Nominal</th><th scope="col" class="text-center">Status</th><th scope="col" class="text-center pe-3">Aksi</th></tr></thead><tbody id="transaction-table-body"></tbody></table></div></div>
+        </div>
+    </main>
+    
+    <footer class="footer text-center mt-5"><div class="container"><span>&copy; 2024 Panel Admin. All Rights Reserved.</span></div></footer>
+
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content"><div class="modal-header modal-header-custom"><h5 class="modal-title" id="detailModalLabel"><i class="bi bi-file-earmark-text me-2"></i>Detail Transaksi</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body p-4" id="modal-content-body"></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => { fetchTransactions(); document.getElementById('searchInput').addEventListener('input', filterTable); });
+        let transactionDataStore = [], detailModal, myTransactionChart = null;
+        const summaryElements = { keuntungan: document.getElementById('total-keuntungan'), sukses: document.getElementById('total-sukses'), transaksi: document.getElementById('total-transaksi'), volume: document.getElementById('total-volume') };
+        const tableBody = document.getElementById('transaction-table-body');
+        const modalContentBody = document.getElementById('modal-content-body');
+        const refreshButton = document.getElementById('refresh-button');
+        const chartCanvas = document.getElementById('transactionChart');
+        const chartPlaceholder = document.getElementById('chart-placeholder');
+        const formatCurrency = amount => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
+        const formatDate = (dateStr, opts = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) => new Date(dateStr).toLocaleDateString('id-ID', opts);
+        function getStatusBadge(status) {
+            const s = (status || '').toLowerCase();
+            const map = { success: { c: 'status-success', t: 'Sukses' }, pending: { c: 'status-pending', t: 'Pending' } };
+            const { c, t } = map[s] || { c: 'status-failed', t: 'Gagal' };
+            return `<span class="badge status-badge ${c}">${t}</span>`;
+        }
+        function renderLoading() {
+            Object.values(summaryElements).forEach(el => el.innerHTML = `<div class="placeholder-glow"><span class="placeholder col-8"></span></div>`);
+            tableBody.innerHTML = Array(5).fill(`<tr>${Array(7).fill(`<td class="placeholder-glow"><span class="placeholder col-10"></span></td>`).join('')}</tr>`).join('');
+            showChartPlaceholder('bi-hourglass-split text-primary', 'Memuat data grafik...');
+            refreshButton.disabled = true;
+            refreshButton.querySelector('i').classList.add('spinner-border', 'spinner-border-sm');
+            refreshButton.querySelector('i').classList.remove('bi-arrow-clockwise');
+        }
+        function resetUIState() {
+            refreshButton.disabled = false;
+            refreshButton.querySelector('i').classList.remove('spinner-border', 'spinner-border-sm');
+            refreshButton.querySelector('i').classList.add('bi-arrow-clockwise');
+        }
+        function showTableMessage(message, type) {
+            const icons = { error: 'bi-exclamation-triangle-fill text-danger', empty: 'bi-info-circle-fill text-primary', info: 'bi-search text-secondary' };
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-5"><i class="bi ${icons[type]} fs-2"></i><p class="mt-2 mb-0">${message}</p></td></tr>`;
+        }
+        function showChartPlaceholder(icon, message) {
+            chartCanvas.style.display = 'none';
+            chartPlaceholder.classList.remove('d-none');
+            chartPlaceholder.querySelector('i').className = `bi ${icon} fs-2`;
+            chartPlaceholder.querySelector('p').textContent = message;
+        }
+        function processChartData(transactions) {
+            const dailyData = transactions.reduce((acc, trx) => {
+                const date = new Date(trx.tanggal).toISOString().split('T')[0];
+                acc[date] = acc[date] || { profit: 0, count: 0 };
+                acc[date].profit += trx.untung || 0;
+                acc[date].count++;
+                return acc;
+            }, {});
+            const sortedDates = Object.keys(dailyData).sort();
+            return { labels: sortedDates.map(d => formatDate(d, { month: 'short', day: 'numeric' })), profitData: sortedDates.map(d => dailyData[d].profit), countData: sortedDates.map(d => dailyData[d].count) };
+        }
+        function renderTransactionChart({ labels, profitData, countData }) {
+            chartPlaceholder.classList.add('d-none'); chartCanvas.style.display = 'block'; if (myTransactionChart) myTransactionChart.destroy();
+            const ctx = chartCanvas.getContext('2d');
+            const profitGradient = ctx.createLinearGradient(0, 0, 0, 300); profitGradient.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); profitGradient.addColorStop(1, 'rgba(25, 135, 84, 0)');
+            const countGradient = ctx.createLinearGradient(0, 0, 0, 300); countGradient.addColorStop(0, 'rgba(13, 110, 253, 0.5)'); countGradient.addColorStop(1, 'rgba(13, 110, 253, 0)');
+            myTransactionChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [ { label: 'Keuntungan', data: profitData, borderColor: '#198754', backgroundColor: profitGradient, fill: true, tension: 0.4, yAxisID: 'yProfit', pointRadius: 2, pointHoverRadius: 6 }, { label: 'Jumlah Transaksi', data: countData, borderColor: '#0d6efd', backgroundColor: countGradient, fill: true, tension: 0.4, yAxisID: 'yCount', pointRadius: 2, pointHoverRadius: 6 } ] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 500 }, interaction: { mode: 'index', intersect: false }, scales: { yProfit: { position: 'left', ticks: { callback: v => formatCurrency(v) }, grid: { drawOnChartArea: true, color: '#e9ecef' } }, yCount: { position: 'right', ticks: { precision: 0 }, grid: { drawOnChartArea: false } } }, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.dataset.yAxisID === 'yProfit' ? formatCurrency(c.parsed.y) : `${c.parsed.y} trx`}` } } } } });
+        }
+        function showDetail(id) {
+            const trx = transactionDataStore.find(t => t._id === id);
+            if (!trx) return;
+            modalContentBody.innerHTML = `<div class="row"><div class="col-md-6 mb-3 mb-md-0"><h5><i class="bi bi-info-circle-fill text-primary me-2"></i>Informasi Order</h5><p class="mb-2"><strong>ID Order:</strong> ${trx.idOrder}</p><p class="mb-2"><strong>ID Internal:</strong> ${trx.internalTrxId}</p><p class="mb-2"><strong>Tanggal:</strong> ${formatDate(trx.tanggal)}</p><p class="mb-2"><strong>Produk:</strong> ${trx.productCode}</p><p class="mb-0"><strong>Tujuan:</strong> ${trx.tujuan}</p></div><div class="col-md-6"><h5><i class="bi bi-currency-dollar text-success me-2"></i>Informasi Keuangan</h5><p class="mb-2"><strong>Harga Produk:</strong> ${formatCurrency(trx.hargaProduk)}</p><p class="mb-2"><strong>Nominal Deposit:</strong> ${formatCurrency(trx.nominalDeposit)}</p><p class="mb-2"><strong>Keuntungan:</strong> <span class="fw-bold text-success">${formatCurrency(trx.untung)}</span></p><hr class="my-2"><p class="mb-2"><strong>Status Order:</strong> ${getStatusBadge(trx.statusOrder)}</p><p class="mb-0"><strong>Status Deposit:</strong> ${getStatusBadge(trx.statusDeposit)}</p></div></div>`;
+            if (!detailModal) detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+            detailModal.show();
+        }
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = tableBody.getElementsByTagName('tr');
+            let visibleCount = 0;
+            if (rows.length > 1 || !rows[0]?.querySelector('td[colspan="7"]')) {
+                for (let row of rows) {
+                    const isVisible = row.textContent.toLowerCase().includes(query);
+                    row.style.display = isVisible ? '' : 'none';
+                    if(isVisible) visibleCount++;
+                }
+                if(visibleCount === 0) showTableMessage(`Tidak ada hasil untuk "${query}"`, 'info');
+            }
+        }
+        async function fetchTransactions() {
+            renderLoading();
+            try {
+                const response = await fetch('/api/mutasi');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const result = await response.json();
+                if (!result.success || !Array.isArray(result.data)) throw new Error('Format API tidak valid.');
+                transactionDataStore = result.data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                const totals = transactionDataStore.reduce((acc, trx) => ({ keuntungan: acc.keuntungan + (trx.untung || 0), volume: acc.volume + (trx.nominalDeposit || 0), sukses: acc.sukses + (trx.statusOrder.toLowerCase() === 'success' ? 1 : 0) }), { keuntungan: 0, sukses: 0, volume: 0 });
+                summaryElements.keuntungan.textContent = formatCurrency(totals.keuntungan);
+                summaryElements.sukses.textContent = `${totals.sukses} Order`;
+                summaryElements.transaksi.textContent = `${transactionDataStore.length} Order`;
+                summaryElements.volume.textContent = formatCurrency(totals.volume);
+                if (transactionDataStore.length === 0) {
+                    showTableMessage('Belum ada data transaksi.', 'empty');
+                    showChartPlaceholder('bi-info-circle-fill text-primary', 'Tidak ada data untuk ditampilkan pada grafik.');
+                } else {
+                    tableBody.innerHTML = transactionDataStore.map(trx => `<tr onclick="showDetail('${trx._id}')"><td class="ps-3">${formatDate(trx.tanggal)}</td><td>${trx.idOrder}</td><td>${trx.productCode}</td><td>${trx.tujuan}</td><td class="text-end fw-medium">${formatCurrency(trx.nominalDeposit)}</td><td class="text-center">${getStatusBadge(trx.statusOrder)}</td><td class="text-center pe-3"><button class="btn btn-sm btn-outline-primary py-1 px-2" title="Lihat Detail"><i class="bi bi-eye"></i></button></td></tr>`).join('');
+                    renderTransactionChart(processChartData(transactionDataStore));
+                }
+            } catch (error) {
+                Object.values(summaryElements).forEach(el => el.textContent = 'Error');
+                showTableMessage('Gagal memuat data. Silakan coba lagi nanti.', 'error');
+                showChartPlaceholder('bi-exclamation-triangle-fill text-danger', 'Gagal memuat data grafik.');
+            } finally {
+                resetUIState();
+            }
+        }
+    </script>
+</body>
+</html>
