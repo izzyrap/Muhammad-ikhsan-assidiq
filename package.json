@@ -1,0 +1,9 @@
+{
+  "name": "tokoraine",
+  "version": "1.0.0",
+  "description": "Toko Raine - Panel Pterodactyl Auto Deploy",
+  "main": "index.html",
+  "dependencies": {
+    "axios": "^1.7.0"
+  }
+}

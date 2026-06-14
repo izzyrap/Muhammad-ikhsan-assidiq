@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Raine - Panel Pterodactyl Hosting</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">Toko<span>Raine</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero">Beranda</a></li>
+            <li><a href="#products">Panel</a></li>
+            <li><a href="#contact">Order</a></li>
+        </ul>
+        <a href="#contact" class="btn-cta">Order Sekarang</a>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Panel <span class="blue">Pterodactyl</span> Otomatis</h1>
+            <p>Deploy server otomatis setelah pembayaran QRIS via <strong>Pakasir</strong>. Dukung <i class="fab fa-js"></i> Node.js, <i class="fab fa-html5"></i> HTML, <i class="fab fa-css3-alt"></i> CSS, dan bahasa lain.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn-cta">Lihat Paket</a>
+                <a href="#contact" class="btn-outline">Tanya Dulu</a>
+            </div>
+        </div>
+        <div class="hero-graphic">
+            <i class="fas fa-server fa-5x"></i>
+        </div>
+    </section>
+
+    <!-- Kenapa Memilih -->
+    <section class="why-us">
+        <h2>Kenapa Toko Raine?</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <i class="fas fa-bolt"></i>
+                <h4>Auto Deploy</h4>
+                <p>Panel langsung aktif setelah pembayaran dikonfirmasi.</p>
+            </div>
+            <div class="why-card">
+                <i class="fas fa-qrcode"></i>
+                <h4>QRIS Mudah</h4>
+                <p>Bayar pakai QRIS lewat Pakasir, aman dan cepat.</p>
+            </div>
+            <div class="why-card">
+                <i class="fab fa-node-js"></i>
+                <h4>Full Stack Support</h4>
+                <p>Node.js, HTML/CSS/JS, Python, Java, dan banyak lagi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products" id="products">
+        <h2>Pilih Paket Panel</h2>
+        <p class="subtitle">Klik <strong>Beli</strong> untuk langsung dapatkan QR Code pembayaran.</p>
+        <div class="products-grid">
+            <!-- 1GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>1 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 1 GB</li>
+                    <li><strong>Storage:</strong> 10 GB SSD</li>
+                    <li><strong>CPU:</strong> 50%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 5.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="1GB" data-price="5000">Beli</button>
+            </div>
+            <!-- 2GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>2 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 2 GB</li>
+                    <li><strong>Storage:</strong> 20 GB SSD</li>
+                    <li><strong>CPU:</strong> 100%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 10.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="2GB" data-price="10000">Beli</button>
+            </div>
+            <!-- 3GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>3 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 3 GB</li>
+                    <li><strong>Storage:</strong> 30 GB SSD</li>
+                    <li><strong>CPU:</strong> 150%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 15.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="3GB" data-price="15000">Beli</button>
+            </div>
+            <!-- 4GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>4 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 4 GB</li>
+                    <li><strong>Storage:</strong> 40 GB SSD</li>
+                    <li><strong>CPU:</strong> 200%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 20.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="4GB" data-price="20000">Beli</button>
+            </div>
+            <!-- 5GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>5 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 5 GB</li>
+                    <li><strong>Storage:</strong> 50 GB SSD</li>
+                    <li><strong>CPU:</strong> 250%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 25.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="5GB" data-price="25000">Beli</button>
+            </div>
+            <!-- 6GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>6 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 6 GB</li>
+                    <li><strong>Storage:</strong> 60 GB SSD</li>
+                    <li><strong>CPU:</strong> 300%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 30.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="6GB" data-price="30000">Beli</button>
+            </div>
+            <!-- 7GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>7 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 7 GB</li>
+                    <li><strong>Storage:</strong> 70 GB SSD</li>
+                    <li><strong>CPU:</strong> 350%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 35.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="7GB" data-price="35000">Beli</button>
+            </div>
+            <!-- 8GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>8 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 8 GB</li>
+                    <li><strong>Storage:</strong> 80 GB SSD</li>
+                    <li><strong>CPU:</strong> 400%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 40.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="8GB" data-price="40000">Beli</button>
+            </div>
+            <!-- 9GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>9 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 9 GB</li>
+                    <li><strong>Storage:</strong> 90 GB SSD</li>
+                    <li><strong>CPU:</strong> 450%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 45.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="9GB" data-price="45000">Beli</button>
+            </div>
+            <!-- 10GB -->
+            <div class="product-card">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h3>10 GB</h3>
+                <ul>
+                    <li><strong>RAM:</strong> 10 GB</li>
+                    <li><strong>Storage:</strong> 100 GB SSD</li>
+                    <li><strong>CPU:</strong> 500%</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 50.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="10GB" data-price="50000">Beli</button>
+            </div>
+            <!-- Unlimited -->
+            <div class="product-card featured">
+                <i class="fas fa-crown fa-2x"></i>
+                <h3>UNLIMITED</h3>
+                <ul>
+                    <li><strong>RAM:</strong> Unlimited*</li>
+                    <li><strong>Storage:</strong> Unlimited*</li>
+                    <li><strong>CPU:</strong> Unlimited*</li>
+                    <li><strong>Support:</strong> <i class="fab fa-js"></i> <i class="fab fa-html5"></i> <i class="fab fa-css3-alt"></i></li>
+                </ul>
+                <div class="price">Rp 100.000 <small>/bln</small></div>
+                <button class="btn-buy" data-package="UNLIMITED" data-price="100000">Beli</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <h2>Order Cepat</h2>
+        <div class="contact-box">
+            <form id="orderForm">
+                <label>Nama</label>
+                <input type="text" id="name" required placeholder="Nama kamu">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="Email aktif">
+                <label>Pilih Paket</label>
+                <select id="packageSelect" required>
+                    <option value="">-- Pilih --</option>
+                    <option value="1GB">1GB - Rp 5.000</option>
+                    <option value="2GB">2GB - Rp 10.000</option>
+                    <option value="3GB">3GB - Rp 15.000</option>
+                    <option value="4GB">4GB - Rp 20.000</option>
+                    <option value="5GB">5GB - Rp 25.000</option>
+                    <option value="6GB">6GB - Rp 30.000</option>
+                    <option value="7GB">7GB - Rp 35.000</option>
+                    <option value="8GB">8GB - Rp 40.000</option>
+                    <option value="9GB">9GB - Rp 45.000</option>
+                    <option value="10GB">10GB - Rp 50.000</option>
+                    <option value="UNLIMITED">Unlimited - Rp 100.000</option>
+                </select>
+                <button type="submit" class="btn-submit">Dapatkan QR Code</button>
+            </form>
+            <div id="paymentResult" class="hidden"></div>
+        </div>
+    </section>
+
+    <!-- Modal QR -->
+    <div id="qrModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Scan QRIS untuk Pembayaran</h3>
+            <div id="qrContainer"></div>
+            <p id="transactionId"></p>
+            <p class="note">Panel akan otomatis dibuat setelah pembayaran terverifikasi.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Toko Raine | Auto Deploy Panel Pterodactyl</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
