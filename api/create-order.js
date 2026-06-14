@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
             description: `Panel Pterodactyl ${pkg} - ${name}`,
         };
 
-        const response = await axios.post(`${PAKASIR_BASE_URL}/api/v1/transaction`, payload, {
+        const response = await axios.post(`${PAKASIR_BASE_URL}/api/transactioncreate/qris`, payload, {
             headers: {
                 'Authorization': `Bearer ${PAKASIR_API_KEY}`,
                 'Content-Type': 'application/json'
