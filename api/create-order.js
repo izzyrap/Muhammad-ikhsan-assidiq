@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
     }
 
     const PAKASIR_API_KEY = process.env.PAKASIR_API_KEY;
-    const PAKASIR_BASE_URL = process.env.PAKASIR_BASE_URL || 'https://api.pakasir.com';
+    const PAKASIR_BASE_URL = process.env.PAKASIR_BASE_URL || 'https://app.pakasir.com';
 
     try {
         const payload = {
