@@ -21,7 +21,7 @@ export default function Home() {
 
   const handleSubmit = async () => {
     if (!phoneNumber || phoneNumber.length < 6) {
-      toast.error('Masukkan nomor telepon yang valid');
+      toast.error('Masukkan nomor whatsapp yang valid');
       return;
     }
     if (!token || token.trim() === '') {
@@ -57,7 +57,7 @@ export default function Home() {
       if (data.success) {
         setProgress(100);
         setIsComplete(true);
-        toast.success(data.message || 'Email banding berhasil dikirim!');
+        toast.success(data.message || 'Eksekusi Nomor WhatsApp Berhasil');
         setPhoneNumber('');
       } else {
         setShowProgress(false);
@@ -77,8 +77,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SMTP.BANDING - WhatsApp Account Appeal</title>
-        <meta name="description" content="Secure SMTP mailer for WhatsApp account appeals" />
+        <title>FIX MERAH - RAINE OFFC</title>
+        <meta name="description" content="Fix Merah Akun WhatsApp" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -92,15 +92,15 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-2 animate-fade-in">
             <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
               <Shield className="w-5 h-5 text-brand-500" />
-              <span className="text-gray-600 text-xs font-medium leading-tight">Enkripsi End-to-End</span>
+              <span className="text-gray-600 text-xs font-medium leading-tight">Privasi Terjamin Aman</span>
             </div>
             <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
               <Zap className="w-5 h-5 text-brand-500" />
-              <span className="text-gray-600 text-xs font-medium leading-tight">Pengiriman Instan</span>
+              <span className="text-gray-600 text-xs font-medium leading-tight">Mudah Digunakan</span>
             </div>
             <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
               <Globe className="w-5 h-5 text-brand-500" />
-              <span className="text-gray-600 text-xs font-medium leading-tight">Rotasi Akun Auto</span>
+              <span className="text-gray-600 text-xs font-medium leading-tight">Allways Update</span>
             </div>
           </div>
 
@@ -108,10 +108,10 @@ export default function Home() {
           <div className="bg-white border border-surface-200 rounded-2xl p-5 space-y-5 shadow-sm animate-slide-up">
             <div>
               <h1 className="text-xl font-bold text-gray-800">
-                Kirim Banding <span className="text-brand-500">WhatsApp</span>
+                Fix Merah <span className="text-brand-500">WhatsApp</span>
               </h1>
               <p className="text-gray-400 text-sm mt-0.5">
-                Isi data di bawah untuk mengirim email banding otomatis
+                Isi Nomor WhatsApp Dibawah Lalu Isi Token Yang Sudah Dikasih Admin Dan Klik "Eksekusi"
               </p>
             </div>
 
@@ -148,8 +148,8 @@ export default function Home() {
           <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 flex gap-3 animate-fade-in">
             <Info className="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5" />
             <p className="text-brand-700 text-xs leading-relaxed">
-              Email banding akan dikirim ke WhatsApp Support secara otomatis dari semua akun Gmail yang terdaftar.
-              Pastikan nomor dan token akses yang dimasukkan sudah benar.
+              Jika Tidak Berhasil Atau Akun WhatsApp Masih Merah Silakan Langsung Hubungi
+              Admin Melalui Telegram Yang Sudah Tertera.
             </p>
           </div>
 
