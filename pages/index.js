@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { Cpu, Zap, Shield, Globe, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Shield, Zap, Globe, Info } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -20,7 +20,6 @@ export default function Home() {
   const [showProgress, setShowProgress] = useState(false);
 
   const handleSubmit = async () => {
-    // Validasi
     if (!phoneNumber || phoneNumber.length < 6) {
       toast.error('Masukkan nomor telepon yang valid');
       return;
@@ -35,7 +34,6 @@ export default function Home() {
     setProgress(0);
     setIsComplete(false);
 
-    // Simulasi progress di client
     let clientProgress = 0;
     const progressInterval = setInterval(() => {
       clientProgress += Math.floor(Math.random() * 10) + 3;
@@ -52,15 +50,14 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber, countryCode: selectedCode, token }),
       });
-      
+
       const data = await res.json();
-      
       clearInterval(progressInterval);
-      
+
       if (data.success) {
         setProgress(100);
         setIsComplete(true);
-        toast.success('Email banding berhasil dikirim!');
+        toast.success(data.message || 'Email banding berhasil dikirim!');
         setPhoneNumber('');
       } else {
         setShowProgress(false);
@@ -82,48 +79,51 @@ export default function Home() {
       <Head>
         <title>SMTP.BANDING - WhatsApp Account Appeal</title>
         <meta name="description" content="Secure SMTP mailer for WhatsApp account appeals" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-cyber-900 via-cyber-800 to-cyber-900 flex flex-col">
+      <div className="min-h-screen bg-surface-100 flex flex-col">
         <Header />
-        
-        <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
-          {/* Hero */}
-          <div className="text-center mb-8 animate-fade-in">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-wider text-cyber-100 mb-4">
-              <span className="text-cyber-300">SMTP</span> BANDING
-            </h1>
-            <p className="text-cyber-400 text-sm tracking-wider max-w-md mx-auto">
-              Secure email gateway untuk pengajuan banding akun WhatsApp
-            </p>
-          </div>
 
-          {/* Info Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-slide-up">
-            <div className="bg-cyber-800 border border-cyber-600 rounded-lg p-4 flex items-center gap-3">
-              <Shield className="w-5 h-5 text-cyber-300 flex-shrink-0" />
-              <span className="text-cyber-400 text-xs tracking-wider">ENKRIPSI END-TO-END</span>
+        <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-6 space-y-4">
+
+          {/* Badge cards */}
+          <div className="grid grid-cols-3 gap-2 animate-fade-in">
+            <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
+              <Shield className="w-5 h-5 text-brand-500" />
+              <span className="text-gray-600 text-xs font-medium leading-tight">Enkripsi End-to-End</span>
             </div>
-            <div className="bg-cyber-800 border border-cyber-600 rounded-lg p-4 flex items-center gap-3">
-              <Zap className="w-5 h-5 text-cyber-300 flex-shrink-0" />
-              <span className="text-cyber-400 text-xs tracking-wider">PENGIRIMAN INSTAN</span>
+            <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
+              <Zap className="w-5 h-5 text-brand-500" />
+              <span className="text-gray-600 text-xs font-medium leading-tight">Pengiriman Instan</span>
             </div>
-            <div className="bg-cyber-800 border border-cyber-600 rounded-lg p-4 flex items-center gap-3">
-              <Globe className="w-5 h-5 text-cyber-300 flex-shrink-0" />
-              <span className="text-cyber-400 text-xs tracking-wider">ROTASI OTOMATIS</span>
+            <div className="bg-white border border-surface-200 rounded-xl p-3 flex flex-col items-center gap-1.5 text-center shadow-sm">
+              <Globe className="w-5 h-5 text-brand-500" />
+              <span className="text-gray-600 text-xs font-medium leading-tight">Rotasi Akun Auto</span>
             </div>
           </div>
 
           {/* Main Form */}
-          <div className="bg-cyber-800 border border-cyber-600 rounded-2xl p-6 md:p-8 space-y-6 animate-slide-up">
+          <div className="bg-white border border-surface-200 rounded-2xl p-5 space-y-5 shadow-sm animate-slide-up">
+            <div>
+              <h1 className="text-xl font-bold text-gray-800">
+                Kirim Banding <span className="text-brand-500">WhatsApp</span>
+              </h1>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Isi data di bawah untuk mengirim email banding otomatis
+              </p>
+            </div>
+
+            <div className="h-px bg-surface-100" />
+
             <PhoneInput
               selectedCode={selectedCode}
               setSelectedCode={setSelectedCode}
               phoneNumber={phoneNumber}
               setPhoneNumber={setPhoneNumber}
             />
-            
+
             <TokenInput
               token={token}
               setToken={setToken}
@@ -131,38 +131,30 @@ export default function Home() {
               setIsValid={setIsValid}
             />
 
-            {/* Divider */}
-            <div className="border-t border-cyber-600" />
+            <div className="h-px bg-surface-100" />
 
-            {/* Submit */}
             <SubmitButton
               isLoading={isLoading}
               disabled={!phoneNumber || !token || phoneNumber.length < 6}
               onClick={handleSubmit}
             />
 
-            {/* Progress */}
             {showProgress && (
               <ProgressBar progress={progress} isComplete={isComplete} />
             )}
           </div>
 
-          {/* Info Section */}
-          <div className="mt-8 bg-cyber-800/50 border border-cyber-600/50 rounded-xl p-5 animate-fade-in">
-            <div className="flex items-start gap-3">
-              <Cpu className="w-5 h-5 text-cyber-300 flex-shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-cyber-200 text-sm font-semibold tracking-wider mb-2">INFORMASI</h3>
-                <p className="text-cyber-500 text-xs leading-relaxed">
-                  Tools ini digunakan untuk mengirim email banding ke WhatsApp Support secara otomatis. 
-                  Nomor Anda akan diproses melalui gateway SMTP yang aman dengan rotasi akun Gmail otomatis.
-                  Pastikan nomor yang dimasukkan benar dan token akses valid.
-                </p>
-              </div>
-            </div>
+          {/* Info */}
+          <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 flex gap-3 animate-fade-in">
+            <Info className="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5" />
+            <p className="text-brand-700 text-xs leading-relaxed">
+              Email banding akan dikirim ke WhatsApp Support secara otomatis dari semua akun Gmail yang terdaftar.
+              Pastikan nomor dan token akses yang dimasukkan sudah benar.
+            </p>
           </div>
+
         </main>
-        
+
         <Footer />
       </div>
 
@@ -170,10 +162,11 @@ export default function Home() {
         position="top-center"
         toastOptions={{
           style: {
-            background: '#1a2332',
-            color: '#93c5fd',
-            border: '1px solid #2d4a6b',
+            background: '#ffffff',
+            color: '#1e293b',
+            border: '1px solid #e2e8f0',
             fontSize: '14px',
+            borderRadius: '12px',
           },
         }}
       />
