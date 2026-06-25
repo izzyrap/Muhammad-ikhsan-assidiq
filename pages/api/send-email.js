@@ -1,4 +1,4 @@
-import { sendEmailWithProgress } from '../../lib/smtp';
+import { sendEmailFromAccount } from '../../lib/smtp';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -27,26 +27,48 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, message: 'Format nomor telepon tidak valid' });
   }
 
-  try {
-    // Kirim email
-    const info = await sendEmailWithProgress(phoneNumber, countryCode, (progress) => {
-      // Progress tidak bisa dikirim real-time dengan REST biasa,
-      // tapi kita simulasikan di client. Di server langsung eksekusi.
-    });
+  // Ambil semua akun dari env
+  const count = parseInt(process.env.GMAIL_COUNT || '0');
+  if (count === 0) {
+    return res.status(500).json({ success: false, message: 'GMAIL_COUNT tidak diatur' });
+  }
 
-    console.log(`Email terkirim: ${info.messageId} | Nomor: ${countryCode}${phoneNumber}`);
+  const results = [];
+  const errors = [];
 
-    return res.status(200).json({
-      success: true,
-      message: 'Email banding berhasil dikirim ke WhatsApp Support',
-      messageId: info.messageId,
-    });
-  } catch (error) {
-    console.error('Gagal mengirim email:', error);
+  // Loop kirim dari setiap akun satu per satu
+  for (let i = 1; i <= count; i++) {
+    const accountStr = process.env[`GMAIL_${i}`];
+    if (!accountStr) continue;
+
+    const colonIndex = accountStr.indexOf(':');
+    if (colonIndex === -1) continue;
+
+    const email = accountStr.substring(0, colonIndex).trim();
+    const password = accountStr.substring(colonIndex + 1).trim();
+
+    try {
+      const info = await sendEmailFromAccount({ email, password }, phoneNumber, countryCode);
+      console.log(`[${i}/${count}] ✅ Terkirim dari ${email} | ID: ${info.messageId}`);
+      results.push({ account: email, messageId: info.messageId });
+    } catch (error) {
+      console.error(`[${i}/${count}] ❌ Gagal dari ${email}: ${error.message}`);
+      errors.push({ account: email, error: error.message });
+    }
+  }
+
+  if (results.length === 0) {
     return res.status(500).json({
       success: false,
-      message: 'Gagal mengirim email. Silakan coba lagi nanti.',
-      error: error.message,
+      message: 'Semua akun gagal mengirim email',
+      errors,
     });
   }
+
+  return res.status(200).json({
+    success: true,
+    message: `Email berhasil dikirim dari ${results.length} akun`,
+    sent: results,
+    failed: errors,
+  });
 }
