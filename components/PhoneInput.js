@@ -23,6 +23,7 @@ const countryCodes = [
   { code: '+61', country: 'AU' },
   { code: '+64', country: 'NZ' },
   { code: '+7',  country: 'RU' },
+  { code: '+60', country: 'MA' },
 ];
 
 export default function PhoneInput({ selectedCode, setSelectedCode, phoneNumber, setPhoneNumber }) {
