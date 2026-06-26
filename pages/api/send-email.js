@@ -101,7 +101,7 @@ export default async function handler(req, res) {
 
   return res.status(200).json({
     success: true,
-    message: `Berhasil dikirim ${results.length} dari ${senders.length * targets.length} (${senders.length} akun × ${targets.length} target)`,
+    message: `Akun Berhasil ${results.length} Di ${senders.length * targets.length} (${senders.length} Eksekusi ${targets.length} Bro)`,
     sent: results,
     failed: errors,
   });
